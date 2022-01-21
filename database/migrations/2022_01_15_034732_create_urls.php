@@ -15,7 +15,7 @@ class CreateUrls extends Migration
     {
         Schema::create('urls', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name', 255)->unique();
+            $table->string('name', 255);
             $table->timestamp('created_at');
         });
     }
