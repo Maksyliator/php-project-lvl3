@@ -14,5 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Composer install
+      run: composer install
     - name: Check lint
       run: make lint
