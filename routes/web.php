@@ -46,6 +46,9 @@ Route::post('/url', function (Request $request) {
 // ВЫВОД СТАНИЦЫ НА ПРОВЕРКУ
 Route::get('/urls/{id}', function ($id) {
     $urlData = DB::table('urls')->find($id);
+    if (is_null($urlData)) {
+        abort(404);
+    }
     $checkData = DB::table('url_checks')
         ->where('url_id', $id)
         ->orderBy('created_at', 'desc')
