@@ -14,6 +14,18 @@ Route::get('/', function () {
     return view('main');
 })->name('main');
 
+// ВЫВОД ВСЕХ САЙТОВ
+Route::get('/urls', function () {
+    $urls = DB::table('urls')->orderBy('id')->paginate();
+    $lastChecks = DB::table('url_checks')
+        ->distinct('url_id')
+        ->orderBy('url_id')
+        ->latest()
+        ->get()
+        ->keyBy('url_id');
+    return view('sites', compact('urls', 'lastChecks'));
+})->name('browsing.sites');
+
 // ПОЛУЧЕНИЕ И ОБРАБОТКА АДРЕСА
 Route::post('/url', function (Request $request) {
     $url = $request->input('url');
@@ -55,18 +67,6 @@ Route::get('/urls/{id}', function ($id) {
         ->get();
     return view('analysis', compact('urlData', 'checkData'));
 })->name('site.analysis');
-
-// ВЫВОД ВСЕХ САЙТОВ
-Route::get('/urls', function () {
-    $urls = DB::table('urls')->orderBy('id')->paginate();
-    $lastChecks = DB::table('url_checks')
-        ->distinct('url_id')
-        ->orderBy('url_id')
-        ->latest()
-        ->get()
-        ->keyBy('url_id');
-    return view('sites', compact('urls', 'lastChecks'));
-})->name('browsing.sites');
 
 // ВЫПОЛНЕНИЕ ПРОВЕРКИ
 Route::post('/urls/{id}/checks', function ($id) {
