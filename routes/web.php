@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use DiDom\Document;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\RequestException;
 
 Route::get('/', function () {
     return view('main');
@@ -46,9 +48,7 @@ Route::post('/url', function (Request $request) {
 // ВЫВОД СТАНИЦЫ НА ПРОВЕРКУ
 Route::get('/urls/{id}', function ($id) {
     $urlData = DB::table('urls')->find($id);
-    if (is_null($urlData)) {
-        abort(404);
-    }
+    abort_unless($urlData, 404);
     $checkData = DB::table('url_checks')
         ->where('url_id', $id)
         ->orderBy('created_at', 'desc')
@@ -71,23 +71,34 @@ Route::get('/urls', function () {
 // ВЫПОЛНЕНИЕ ПРОВЕРКИ
 Route::post('/urls/{id}/checks', function ($id) {
     $name = DB::table('urls')->where('id', $id)->value('name');
-    $created = Carbon::now();
-    $response = Http::get($name);
-    $statusCode = $response->status();
-    $document = new Document($response->body());
-    $h1 = optional($document->first('h1'))->text();
-    $title = optional($document->first('title'))->text();
-    $description = optional($document->first('meta[name="description"]'))->getAttribute('content');
-    DB::table('url_checks')->insert(
-        [
+    abort_unless($name, 404);
+    try {
+        $response = Http::get($name);
+        $document = new Document($response->body());
+        $statusCode = $response->status();
+        $h1 = optional($document->first('h1'))->text();
+        $title = optional($document->first('title'))->text();
+        $created = Carbon::now();
+        if ($title === null) {
+            $title = optional($document->first('meta[name=Keywords]'))->getAttribute('content');
+        }
+        $description = optional($document->first('meta[name=description]'))->getAttribute('content');
+        if ($description === null) {
+            $description = optional($document->first('meta[name=Description]'))->getAttribute('content');
+        }
+        DB::table('url_checks')->insert(
+            [
             'url_id' => $id,
             'status_code' => $statusCode,
             'h1' => $h1,
             'title' => $title,
             'description' => $description,
             'created_at' => $created
-        ]
-    );
-    flash('Страница успешно проверена')->success();
+            ]
+        );
+        flash('Страница успешно проверена')->success();
+    } catch (RequestException | ConnectionException $e) {
+        flash("Exception: {$e->getMessage()}")->error();
+    }
     return redirect()->route('site.analysis', ['id' => $id]);
 })->name('checks');
