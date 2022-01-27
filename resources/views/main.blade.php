@@ -13,8 +13,9 @@
                 <p class="lead">Бесплатно проверяйте сайты на SEO пригодность</p>
                 <form action="{{ route('saving.site') }}" method="post" class="d-flex justify-content-center">
                     @csrf
-                    <input type="text" name="url[name]" class="form-control form-control-lg" placeholder="https://www.example.com">
-                    <input type="submit" class="btn btn-primary btn-lg ms-3 px-5 text-uppercase mx-3" value="Проверить">
+                    <input type="text" name="url[name]" class="form-control form-control-lg"
+                           placeholder="https://www.example.com">
+                    <input type="submit" value="Проверить">
                 </form>
             </div>
         </div>
