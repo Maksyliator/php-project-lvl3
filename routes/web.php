@@ -27,7 +27,7 @@ Route::get('/urls', function () {
 })->name('browsing.sites');
 
 // ПОЛУЧЕНИЕ И ОБРАБОТКА АДРЕСА
-Route::post('/url', function (Request $request) {
+Route::post('/urls', function (Request $request) {
     $url = $request->input('url');
     $rules = ['name' => ['max:255', 'url']];
     $messages = [
