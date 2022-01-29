@@ -44,7 +44,7 @@ Route::post('/urls', function (Request $request) {
     $parsedName = parse_url(strtolower($url['name']));
     $nameUrl = $parsedName['scheme'] . '://' . $parsedName['host'];
     $urlData = DB::table('urls')->where('name', $nameUrl)->first();
-    if (is_null($urlData)) {
+    if (!is_null($urlData)) {
         $id = $urlData -> id;
         flash('Страница уже существует')->success();
     } else {
