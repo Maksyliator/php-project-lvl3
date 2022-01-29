@@ -24,7 +24,7 @@
                     </tr>
                 </table>
                 <h2 class="mt-5 mb-3">Проверки</h2>
-                <form method="post" action="{{ route('checks', ['id' => $urlData->id]) }}">
+                <form method="post" action="{{ route('urls.checks', ['id' => $urlData->id]) }}">
                     @csrf
                     <input type="submit" class="btn btn-primary" value="Запустить проверку">
                 </form>

@@ -14,18 +14,6 @@ Route::get('/', function () {
     return view('main');
 })->name('main');
 
-// ВЫВОД ВСЕХ САЙТОВ
-Route::get('/urls', function () {
-    $urls = DB::table('urls')->orderBy('id')->paginate();
-    $lastChecks = DB::table('url_checks')
-        ->distinct('url_id')
-        ->orderBy('url_id')
-        ->latest()
-        ->get()
-        ->keyBy('url_id');
-    return view('sites', compact('urls', 'lastChecks'));
-})->name('browsing.sites');
-
 // ПОЛУЧЕНИЕ И ОБРАБОТКА АДРЕСА
 Route::post('/urls', function (Request $request) {
     $url = $request->input('url');
@@ -54,8 +42,8 @@ Route::post('/urls', function (Request $request) {
         );
         flash('Старница успешно добавлена')->success();
     }
-    return redirect()->route('site.analysis', ['id' => $id]);
-})->name('saving.site');
+    return redirect()->route('urls.show', ['id' => $id]);
+})->name('urls.store');
 
 // ВЫВОД СТАНИЦЫ НА ПРОВЕРКУ
 Route::get('/urls/{id}', function ($id) {
@@ -66,7 +54,19 @@ Route::get('/urls/{id}', function ($id) {
         ->orderBy('created_at', 'desc')
         ->get();
     return view('analysis', compact('urlData', 'checkData'));
-})->name('site.analysis');
+})->name('urls.show');
+
+// ВЫВОД ВСЕХ САЙТОВ
+Route::get('/urls', function () {
+    $urls = DB::table('urls')->orderBy('id')->paginate();
+    $lastChecks = DB::table('url_checks')
+        ->distinct('url_id')
+        ->orderBy('url_id')
+        ->latest()
+        ->get()
+        ->keyBy('url_id');
+    return view('sites', compact('urls', 'lastChecks'));
+})->name('urls.index');
 
 // ВЫПОЛНЕНИЕ ПРОВЕРКИ
 Route::post('/urls/{id}/checks', function ($id) {
@@ -100,5 +100,5 @@ Route::post('/urls/{id}/checks', function ($id) {
     } catch (RequestException | ConnectionException $e) {
         flash("Exception: {$e->getMessage()}")->error();
     }
-    return redirect()->route('site.analysis', ['id' => $id]);
-})->name('checks');
+    return redirect()->route('urls.show', ['id' => $id]);
+})->name('urls.checks');

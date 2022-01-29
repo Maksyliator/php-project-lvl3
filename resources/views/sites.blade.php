@@ -18,7 +18,7 @@
                             @foreach ($urls as $url)
                             <tr>
                                 <th scope="row">{{ $url->id }}</th>
-                                <td><a href="{{ route('site.analysis', ['id' => $url->id]) }}">{{ $url->name }}</a></td>
+                                <td><a href="{{ route('urls.show', ['id' => $url->id]) }}">{{ $url->name }}</a></td>
                                 <td>{{ $lastChecks[$url->id]->created_at ?? null }}</td>
                                 <td>{{ $lastChecks[$url->id]->status_code ?? null}}</td>
                             </tr>
