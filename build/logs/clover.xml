@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1643708546">
-  <project timestamp="1643708546">
+<coverage generated="1643737498">
+  <project timestamp="1643737498">
     <file name="/Users/mac/Programming/control_projects/php-project-lvl3/app/Console/Kernel.php">
       <class name="App\Console\Kernel" namespace="global">
         <metrics complexity="2" methods="2" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="4" coveredstatements="3" elements="6" coveredelements="4"/>
