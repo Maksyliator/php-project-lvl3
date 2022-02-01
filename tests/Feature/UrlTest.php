@@ -29,7 +29,7 @@ class UrlTest extends TestCase
 
     public function testUrlsIndex(): void
     {
-        $response = $this->get(route('browsing.sites'));
+        $response = $this->get(route('urls.index'));
         $response->assertOk();
     }
 
@@ -39,7 +39,7 @@ class UrlTest extends TestCase
             'id' => $this->id,
             'name' => 'https://www.test.com',
         ];
-        $response = $this->get(route('site.analysis', $this->id));
+        $response = $this->get(route('urls.show', $this->id));
         $response->assertOk();
         $this->assertDatabaseHas('urls', $urlDataTest);
     }
@@ -47,7 +47,7 @@ class UrlTest extends TestCase
     public function testInvalidUrlShow(): void
     {
         $invalidId = [1000];
-        $response = $this->get(route('site.analysis', $invalidId));
+        $response = $this->get(route('urls.show', $invalidId));
         $response->assertNotFound();
     }
 
@@ -56,7 +56,7 @@ class UrlTest extends TestCase
         $urlData = [
             'name' => 'https://www.test.com',
         ];
-        $response = $this->post(route('saving.site', ['url' => $urlData]));
+        $response = $this->post(route('urls.store', ['url' => $urlData]));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect()->assertStatus(302);
         $this->assertDatabaseHas('urls', $urlData);
@@ -68,7 +68,7 @@ class UrlTest extends TestCase
             'id' => 100,
             'name' => 'https://www.fake.com',
         ];
-        $this->post(route('saving.site', ['url' => $newData]));
+        $this->post(route('urls.store', ['url' => $newData]));
         $this->assertDatabaseMissing('urls', $newData);
     }
 
@@ -93,12 +93,12 @@ class UrlTest extends TestCase
             'url_id' => $this->id,
             'status_code' => '200',
             'h1' => 'Новости',
-            'title' => "Main page",
-            'description' => "Форум PHP программистов, док?..."
+            'title' => "Форум PHP программистов.",
+            'description' => "Форум PHP программистов."
         ];
         Http::fake(fn ($request) => Http::response($body, 200));
 
-        $response = $this->post(route('checks', [$this->id]));
+        $response = $this->post(route('urls.checks', [$this->id]));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect()->assertStatus(302);
         $this->assertDatabaseHas('url_checks', $checkData);
