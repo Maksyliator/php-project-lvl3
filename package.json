@@ -1,16 +1,4 @@
 {
-    "private": true,
-    "scripts": {
-        "dev": "npm run development",
-        "development": "mix",
-        "watch": "mix watch",
-        "watch-poll": "mix watch -- --watch-options-poll=1000",
-        "hot": "mix watch --hot",
-        "prod": "npm run production",
-        "production": "mix --production",
-        "postinstall": "npm run prod",
-        "heroku-postbuild": "npm run production"
-    },
     "devDependencies": {
         "axios": "^0.21",
         "laravel-mix": "^6.0.6",
@@ -22,5 +10,21 @@
         "resolve-url-loader": "^4.0.0",
         "sass": "^1.32.11",
         "sass-loader": "^11.0.1"
+    },
+    "engines": {
+        "node": "17.x",
+        "npm": "8.x"
+    },
+    "private": true,
+    "scripts": {
+        "dev": "npm run development",
+        "development": "mix",
+        "watch": "mix watch",
+        "watch-poll": "mix watch -- --watch-options-poll=1000",
+        "hot": "mix watch --hot",
+        "prod": "npm run production",
+        "production": "mix --production",
+        "postinstall": "npm run prod",
+        "heroku-postbuild": "npm run production"
     }
 }
