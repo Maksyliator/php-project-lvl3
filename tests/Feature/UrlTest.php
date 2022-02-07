@@ -21,12 +21,6 @@ class UrlTest extends TestCase
         $this->id = DB::table('urls')->insertGetId($urlData);
     }
 
-    public function testUrlsRoot(): void
-    {
-        $response = $this->get(route('main'));
-        $response->assertOk();
-    }
-
     public function testUrlsIndex(): void
     {
         $response = $this->get(route('urls.index'));
