@@ -45,7 +45,7 @@ class UrlChecksTest extends TestCase
             'title' => "Форум PHP программистов.",
             'description' => "Форум PHP программистов."
         ];
-        Http::fake(fn ($request) => Http::response($body, 200));
+        Http::fake(fn ($request) => Http::response($body));
 
         $response = $this->post(route('urls.checks', [$this->id]));
         $response->assertSessionHasNoErrors();
