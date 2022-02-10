@@ -34,7 +34,7 @@ class UrlChecksTest extends TestCase
     public function testUrlChecks(): void
     {
         $pathToFixtures = $this->getFixtureFullPath('htmlTest.html');
-        $body = (string)(file_get_contents($pathToFixtures));
+        $body = file_get_contents($pathToFixtures);
         if ($body == false) {
             throw new \Exception("Error: the file is damaged or missing ");
         }
