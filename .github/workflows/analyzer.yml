@@ -22,3 +22,6 @@ jobs:
 
     - name: Check lint
       run: make lint
+
+    - name: Start tests
+      run: make test
