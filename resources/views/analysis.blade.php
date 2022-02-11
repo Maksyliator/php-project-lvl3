@@ -7,24 +7,24 @@
     </header>
     <main class="flex-grow-1">
         <div class="container-lg">
-            <h1 class="mt-5 mb-3">Сайт: {{ $urlData->name }}</h1>
+            <h1 class="mt-5 mb-3">Сайт: {{ $url->name }}</h1>
             <div class="table-responsive">
                 <table class="table table-bordered table-hover text-nowrap">
                     <tr>
                         <td>{{ 'ID'}}</td>
-                        <td>{{ $urlData->id }}</td>
+                        <td>{{ $url->id }}</td>
                     </tr>
                     <tr>
                         <td>{{ 'Имя' }}</td>
-                        <td>{{ $urlData->name }}</td>
+                        <td>{{ $url->name }}</td>
                     </tr>
                     <tr>
                         <td>{{ 'Дата создания' }}</td>
-                        <td>{{ $urlData->created_at }}</td>
+                        <td>{{ $url->created_at }}</td>
                     </tr>
                 </table>
                 <h2 class="mt-5 mb-3">Проверки</h2>
-                <form method="post" action="{{ route('urls.checks', ['id' => $urlData->id]) }}">
+                <form method="post" action="{{ route('urls.checks', ['id' => $url->id]) }}">
                     @csrf
                     <input type="submit" class="btn btn-primary" value="Запустить проверку">
                 </form>
@@ -39,14 +39,14 @@
                         <th scope="col">Дата создания</th>
                     </tr>
                     <tr>
-                    @foreach ($checkData as $url)
+                    @foreach ($checks as $check)
                         <tr>
-                            <td>{{ $url->id }}</td>
-                            <td>{{ $url->status_code }}</td>
-                            <td>{{ Str::limit($url->h1, 9, ' ...') }}</td>
-                            <td>{{ Str::limit($url->title, 30, ' ...') }}</td>
-                            <td>{{ Str::limit($url->description, 30, ' ...') }}</td>
-                            <td>{{ $url->created_at }}</td>
+                            <td>{{ $check->id }}</td>
+                            <td>{{ $check->status_code }}</td>
+                            <td>{{ Str::limit($check->h1, 9, ' ...') }}</td>
+                            <td>{{ Str::limit($check->title, 30, ' ...') }}</td>
+                            <td>{{ Str::limit($check->description, 30, ' ...') }}</td>
+                            <td>{{ $check->created_at }}</td>
                         </tr>
                         @endforeach
                         </tr>

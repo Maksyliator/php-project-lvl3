@@ -31,9 +31,9 @@ Route::post('/urls', function (Request $request) {
     }
     $parsedName = parse_url(strtolower($url['name']));
     $nameUrl = $parsedName['scheme'] . '://' . $parsedName['host'];
-    $urlData = DB::table('urls')->where('name', $nameUrl)->first();
-    if (!is_null($urlData)) {
-        $id = $urlData -> id;
+    $savedUrl = DB::table('urls')->where('name', $nameUrl)->first();
+    if (!is_null($savedUrl)) {
+        $id = $savedUrl -> id;
         flash('Страница уже существует')->success();
     } else {
         $created = Carbon::now();
@@ -47,13 +47,13 @@ Route::post('/urls', function (Request $request) {
 
 // ВЫВОД СТАНИЦЫ НА ПРОВЕРКУ
 Route::get('/urls/{id}', function ($id) {
-    $urlData = DB::table('urls')->find($id);
-    abort_unless($urlData, 404);
-    $checkData = DB::table('url_checks')
+    $url = DB::table('urls')->find($id);
+    abort_unless($url, 404);
+    $checks = DB::table('url_checks')
         ->where('url_id', $id)
         ->orderBy('created_at', 'desc')
         ->get();
-    return view('analysis', compact('urlData', 'checkData'));
+    return view('analysis', compact('url', 'checks'));
 })->name('urls.show');
 
 // ВЫВОД ВСЕХ САЙТОВ
@@ -79,13 +79,7 @@ Route::post('/urls/{id}/checks', function ($id) {
         $h1 = optional($document->first('h1'))->text();
         $title = optional($document->first('title'))->text();
         $created = Carbon::now();
-        if ($title === null) {
-            $title = optional($document->first('meta[name=Keywords]'))->getAttribute('content');
-        }
         $description = optional($document->first('meta[name=description]'))->getAttribute('content');
-        if ($description === null) {
-            $description = optional($document->first('meta[name=Description]'))->getAttribute('content');
-        }
         DB::table('url_checks')->insert(
             [
             'url_id' => $id,
